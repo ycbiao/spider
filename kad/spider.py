@@ -59,7 +59,7 @@ def get_all_paper(arr):
     chrome_options.add_argument('--disable-gpu')
 
     # PROXY = "113.86.222.104:60443"  # IP:PORT or HOST:PORT
-    chrome_options.add_argument('--proxy-server=http://127.0.0.1:1080')
+    # chrome_options.add_argument('--proxy-server=http://127.0.0.1:1080')
     # chrome_options.add_argument('--proxy-server=http://171.37.135.94:8123')
     browser = webdriver.Chrome(chrome_options=chrome_options)
     for i in range(arr[0],arr[1]):
