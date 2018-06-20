@@ -1,5 +1,5 @@
 total = 100
-step = 70
+step = 80
 start = 1
 
 baseUrl = "http://www.360kad.com"
