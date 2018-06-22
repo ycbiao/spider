@@ -4,6 +4,7 @@ from domestic import param
 import os
 from common import fileutil
 import threading
+import time
 
 
 # 获取详情数据
@@ -21,6 +22,7 @@ import threading
 # 药品本位码
 def get_list_detail(browser,url):
     browser.get(url)
+
     soup = BeautifulSoup(browser.page_source, "lxml")
     tr_list = soup.find('div', attrs={'class': 'listmain'}).find_all("tr")
     data = []
@@ -34,25 +36,32 @@ def get_list_detail(browser,url):
 
 #  获取从arr[0]到arr[1]页列表链接内容
 def get_list(arr):
-    chrome_options = webdriver.ChromeOptions()
-    chrome_options.add_argument('--headless')
-    chrome_options.add_argument('--disable-gpu')
-    browser = webdriver.Chrome(chrome_options=chrome_options)
+    try:
+        start_time = time.time()
+        chrome_options = webdriver.ChromeOptions()
+        chrome_options.add_argument('--headless')
+        chrome_options.add_argument('--disable-gpu')
+        chrome_options.add_argument('--proxy-server=http://114.115.182.59:3128')
+        browser = webdriver.Chrome(chrome_options=chrome_options)
 
-    for index in range(arr[0],arr[1]):
-        url = param.get_all_pager_url(index)
-        browser.get(url)
-        soup = BeautifulSoup(browser.page_source, "lxml")
-        tr_list = soup.find_all("tr")
-        list_data = []
-        for tr in tr_list:
-            a = tr.find("a")
-            if a != None:
-                url_detail = param.baseUrl + a["href"].split(",")[1].strip("'")
-                list_data.append(get_list_detail(browser,url_detail))
-                # print(url_detail)
-        fileutil.create_csv(param.filename, list_data)
-    browser.quit()
+        for index in range(arr[0],arr[1]):
+            url = param.get_all_pager_url(index)
+            browser.get(url)
+            soup = BeautifulSoup(browser.page_source, "lxml")
+            tr_list = soup.find_all("tr")
+            list_data = []
+            for tr in tr_list:
+                a = tr.find("a")
+                if a is not None:
+                    url_detail = param.baseUrl + a["href"].split(",")[1].strip("'")
+                    list_data.append(get_list_detail(browser,url_detail))
+                    # print(url_detail)
+            fileutil.create_csv(param.filename, list_data)
+        browser.quit()
+        use_time = int(time.time()) - int(start_time)
+        print(time.strftime("%H:%M:%S", time.localtime(use_time)))
+    except Exception as e:
+        print(e)
 
 
 class MThread(threading.Thread):

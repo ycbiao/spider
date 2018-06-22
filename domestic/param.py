@@ -3,9 +3,9 @@ filename = "domestic.csv"
 
 total_num = 166112
 # total_pager = 11075
-total_pager = 2
+total_pager = 20
 first_pager = 1
-step = 1
+step = 4
 
 """
 <form method="post" id="pageForm" name="pageForm" action="search.jsp">

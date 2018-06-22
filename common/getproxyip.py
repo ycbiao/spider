@@ -11,8 +11,8 @@ import requests
 # HOME_URL = 'http://www.xicidaili.com/'  # 首页代理IP
 # ANONY_URL = 'http://www.xicidaili.com/nn/'  # 国内高匿代理IP
 # NORMAL_URL = 'http://www.xicidaili.com/nt/'  # 国内普通代理IP
-# HTTP_URL = 'http://www.xicidaili.com/wt/'  # 国内HTTP代理IP
-HTTPS_URL = 'http://www.xicidaili.com/wn/'  # 国内HTTPS代理IP
+HTTP_URL = 'http://www.xicidaili.com/wt/'  # 国内HTTP代理IP
+# HTTPS_URL = 'http://www.xicidaili.com/wn/'  # 国内HTTPS代理IP
 HEADERS = {
     'Host': 'www.xicidaili.com',
     'User-Agent': 'User-Agent:Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.62 Safari/537.36'}
@@ -23,7 +23,7 @@ def get_ip(obj):
     sec_obj = obj.find('table')
     ip_text = sec_obj.findAll('tr')  # 获取带有IP地址的表格的所有行
     if ip_text is not None:
-        with open('Proxy-IP.txt', 'r+') as f:    # 保存到本地txt文件中
+        with open('Proxy-IP.txt', 'w') as f:    # 保存到本地txt文件中
             for i in range(1, len(ip_text)):
                 ip_tag = ip_text[i].findAll('td')
                 ip_live = ip_tag[8].get_text()  # 代理IP存活时间
@@ -34,6 +34,8 @@ def get_ip(obj):
                     if valVer(ip_port) == 1:
                         f.write(ip_port + '\n')
                         print(time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time())) + ' -- ' + 'Got %s proxy IPs.')
+
+            print("process end")
 
 
 # 检测代理可用性
@@ -50,8 +52,8 @@ def valVer(proxy):
         else:
             print(proxy_host, 'success proxy')
             state = 1
-    except Exception:
-        print(Exception)
+    except Exception as e:
+        print(e)
 
     return state
 
@@ -75,4 +77,4 @@ def start(URL):
 
 
 if __name__ == '__main__':
-    start(HTTPS_URL)
+    start(HTTP_URL)
