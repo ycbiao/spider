@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
 # 康爱多网页抓取数据
 import os
-import re
 import threading
 import time
 
 from bs4 import BeautifulSoup
 from selenium import webdriver
-from kad.util import param, csvutil
-from kad.util.getproxyip import get_proxy_id
+
+from common import fileutil
+from kad.util import param
 
 
 # 获取规格和价格
@@ -85,7 +85,7 @@ def get_all_paper(arr):
             print(str(cell_list))
             kad_list.append(cell_list)
 
-        csvutil.create_csv(csvutil.filename, kad_list)
+        fileutil.create_csv(fileutil.filename, kad_list)
 
     browser.quit()
     use_time = int(time.time()) - int(start_time)
@@ -93,8 +93,8 @@ def get_all_paper(arr):
 
 
 def get_all():
-    if os.path.exists(csvutil.filename):
-        os.remove(csvutil.filename)
+    if os.path.exists(fileutil.filename):
+        os.remove(fileutil.filename)
 
     while param.start <= param.total:
         t = SpiderThread([param.start, param.start + param.step])
