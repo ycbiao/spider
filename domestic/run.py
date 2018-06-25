@@ -5,6 +5,8 @@ import os
 from common import fileutil
 import threading
 import time
+from common import timeutil
+from common import getproxyip
 
 
 # 获取详情数据
@@ -37,13 +39,14 @@ def get_list_detail(browser,url):
 #  获取从arr[0]到arr[1]页列表链接内容
 def get_list(arr):
     try:
-        start_time = time.time()
         chrome_options = webdriver.ChromeOptions()
         chrome_options.add_argument('--headless')
         chrome_options.add_argument('--disable-gpu')
-        chrome_options.add_argument('--proxy-server=http://114.115.182.59:3128')
+        proxy_ip = getproxyip.get_fast_proxy_id()
+        if proxy_ip is not "":
+            chrome_options.add_argument('--proxy-server=http://101.236.35.98:8866')
         browser = webdriver.Chrome(chrome_options=chrome_options)
-
+        start_time = time.time()
         for index in range(arr[0],arr[1]):
             url = param.get_all_pager_url(index)
             browser.get(url)
@@ -59,7 +62,7 @@ def get_list(arr):
             fileutil.create_csv(param.filename, list_data)
         browser.quit()
         use_time = int(time.time()) - int(start_time)
-        print(time.strftime("%H:%M:%S", time.localtime(use_time)))
+        print(timeutil.get_use_time(use_time))
     except Exception as e:
         print(e)
 
@@ -83,6 +86,9 @@ def get_all():
 
 
 if __name__ == '__main__':
+
+    # getproxyip.start()
+
     if os.path.exists(param.filename):
         os.remove(param.filename)
 

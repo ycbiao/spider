@@ -9,8 +9,6 @@ def create_csv(file_name,list):
             csv_writer.writerow(cell)
 
 
-
-
 #
 if __name__ == '__main__':
     kads = [["1","2","3"],["1","2","3"]]

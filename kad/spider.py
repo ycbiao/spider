@@ -9,6 +9,7 @@ from selenium import webdriver
 
 from common import fileutil
 from kad.util import param
+from common import timeutil,getproxyip
 
 
 # 获取规格和价格
@@ -57,10 +58,7 @@ def get_all_paper(arr):
     # chrome无头模式不打开页面
     chrome_options.add_argument('--headless')
     chrome_options.add_argument('--disable-gpu')
-
-    # PROXY = "113.86.222.104:60443"  # IP:PORT or HOST:PORT
-    # chrome_options.add_argument('--proxy-server=http://127.0.0.1:1080')
-    # chrome_options.add_argument('--proxy-server=http://171.37.135.94:8123')
+    chrome_options.add_argument('--proxy-server=http://61.135.217.7:80')
     browser = webdriver.Chrome(chrome_options=chrome_options)
     for i in range(arr[0],arr[1]):
         url = param.get_url(i)
@@ -89,12 +87,12 @@ def get_all_paper(arr):
 
     browser.quit()
     use_time = int(time.time()) - int(start_time)
-    print(time.strftime("%H:%M:%S", time.localtime(use_time)))
+    print(print(timeutil.get_use_time(use_time)))
 
 
 def get_all():
-    if os.path.exists(fileutil.filename):
-        os.remove(fileutil.filename)
+    if os.path.exists(param.filename):
+        os.remove(param.filename)
 
     while param.start <= param.total:
         t = SpiderThread([param.start, param.start + param.step])
@@ -113,4 +111,5 @@ class SpiderThread(threading.Thread):
 
 
 if __name__ == '__main__':
+    # getproxyip.start(param.get_url(1))
     get_all()

@@ -1,9 +1,9 @@
-total = 100
-step = 80
+total = 1
+step = 1
 start = 1
 
 baseUrl = "http://www.360kad.com"
-
+filename = 'kad_csv.csv'
 
 def get_url(index):
     return baseUrl + \
